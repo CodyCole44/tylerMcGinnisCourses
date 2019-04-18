@@ -39,7 +39,8 @@ async function getTwentyNewestStories(){
         storyAmount.push(i)
     }
     const response = await Promise.all(storyAmount.map(story => getStoryDetails(story)))
-
+    let newArr = response.filter(x => x.type=='story')
+    console.log(newArr)
     console.log(response);
     
 }
