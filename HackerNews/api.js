@@ -7,6 +7,50 @@ async function getTopStories(){
 
 }
 
+const url="https://hacker-news.firebaseio.com/v0/"
+
+async function getStories(type){
+    const response = await fetch(`${url}/${type}stories.json`)
+    return response.json();
+
+}
+
+async function filterStories(type){
+    const stories = await getStories(type)
+    return stories.slice(0,20)
+
+}
+
+async function getStoryDetails(storyID){
+    const response = await fetch(`${url}/item/${storyID}.json`)
+
+    return response.json()
+}
+
+async function getAllStoryDetails(type){
+    const stories = await filterStories(type);
+    const response = await Promise.all(stories.map(story => getStoryDetails(story)))
+
+    return response;
+}
+
+async function getTopStories(){
+    let response = await getAllStoryDetails('top');
+
+    console.log(response)
+    return response;
+}
+
+async function getNewStories(){
+    let response = await getAllStoryDetails('new');
+
+    console.log(response);
+    return response;
+}
+
+getTopStories()
+getNewStories()
+
 async function filteredTopStories(){
     let stories = await getTopStories();
 
